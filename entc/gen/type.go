@@ -934,13 +934,13 @@ func (t Type) UnexportedForeignKeys() []*ForeignKey {
 // aliases adds package aliases (local names) for all type-packages that
 // their import identifier conflicts with user-defined packages (i.e. GoType).
 func aliases(g *Graph) {
-	mayAlias := make(map[string]*Type)
+	mayAlias := make(map[string]*Type, len(g.Nodes)/2)
 	for _, n := range g.Nodes {
 		if pkg := n.PackageDir(); importPkg[pkg] != "" {
 			// By default, a package named "pet" will be named as "entpet".
 			n.alias = path.Base(g.Package) + pkg
 		} else {
-			mayAlias[n.PackageDir()] = n
+			mayAlias[pkg] = n
 		}
 	}
 	for _, n := range g.Nodes {
